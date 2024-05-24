@@ -1,7 +1,7 @@
 import { Link } from "expo-router";
 import { Text, View } from "react-native";
 
-export default function Index() {
+export default function Children() {
   return (
     <View
       style={{
@@ -10,8 +10,8 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>Welcome 👋</Text>
-      <Link href='/gender'>Next</Link>
+      <Text>Children 👋</Text>
+      <Link href='/account'>Next</Link>
     </View>
   );
 }
