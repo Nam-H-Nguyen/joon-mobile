@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const userSchema = z.object({
+const UserSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
   gender: z.string().min(1, { message: "Gender is required" }),
   children: z.array(z.string()).nonempty({ message: "Children array cannot be empty" }),
@@ -9,4 +9,6 @@ const userSchema = z.object({
   accepted: z.boolean().refine(val => val === true, { message: "Accepted must be true" }),
 });
 
-export { userSchema };
+type UserSchemaType = z.infer<typeof UserSchema>
+
+export { UserSchema, UserSchemaType };
