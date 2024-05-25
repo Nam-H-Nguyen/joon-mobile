@@ -29,7 +29,7 @@ export default function RootLayout() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <GluestackUIProvider config={config}>
-          <View flex={1} p="$6">
+          <View flex={1} p="$6" bgColor="white">
             <UserProvider>
               <WelcomeStackScreens />
             </UserProvider>

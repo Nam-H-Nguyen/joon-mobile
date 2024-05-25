@@ -13,9 +13,26 @@ import {
   EyeOffIcon,
 } from "@gluestack-ui/themed";
 import { useState } from "react";
+import {
+  Controller,
+  FieldValues,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { UserAccountCreateSchema } from "@/schema/userSchema";
 
 export default function Account() {
   const [showPassword, setShowPassword] = useState(false);
+  const {
+    control,
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(UserAccountCreateSchema),
+  });
 
   return (
     <FormControl
