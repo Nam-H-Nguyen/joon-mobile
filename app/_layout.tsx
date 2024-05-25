@@ -6,6 +6,7 @@ import "react-native-reanimated";
 import { config } from "@gluestack-ui/config";
 import { GluestackUIProvider, View } from "@gluestack-ui/themed";
 import WelcomeStackScreens from "@/routes/WelcomeStackScreens";
+import { UserProvider } from "@/context/UserContext";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -29,7 +30,9 @@ export default function RootLayout() {
     <SafeAreaView style={{ flex: 1 }}>
       <GluestackUIProvider config={config}>
           <View flex={1} p="$6">
-            <WelcomeStackScreens />
+            <UserProvider>
+              <WelcomeStackScreens />
+            </UserProvider>
           </View>
       </GluestackUIProvider>
     </SafeAreaView>
