@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 export const style = StyleSheet.create({
   textInput: {
     width: '100%',
+    maxWidth: 500,
     height: 60,
     borderWidth: 1,
     borderColor: "#ececec",

@@ -1,40 +1,27 @@
 import { useUserContext } from "@/context/UserContext";
 import {
-  Alert,
-  AlertCircleIcon,
-  AlertIcon,
-  AlertText,
   Button,
   ButtonText,
   Center,
   FormControl,
-  FormControlError,
-  FormControlErrorIcon,
-  FormControlErrorText,
-  FormControlHelper,
-  FormControlHelperText,
-  FormControlLabel,
-  FormControlLabelText,
   Heading,
-  InfoIcon,
-  Input,
-  InputField,
   KeyboardAvoidingView,
   VStack,
-  View,
 } from "@gluestack-ui/themed";
-import { Link, router } from "expo-router";
-import { useRef, useState } from "react";
-import {
-  Controller,
-  FieldValues,
-  SubmitHandler,
-  useForm,
-} from "react-hook-form";
+import { router } from "expo-router";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserNameSchema, UserNameSchemaType } from "@/schema/userSchema";
-import { TextInput } from "react-native";
+import {
+  Keyboard,
+  Platform,
+  TextInput,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { style } from "@/style/textinput";
+import Alert from "@/components/Alert";
+import PaddedView from "@/components/PaddedView";
+import { color } from "@/style/color";
 
 export default function Index() {
   const { setUser } = useUserContext();
@@ -52,45 +39,55 @@ export default function Index() {
   };
 
   return (
-    <KeyboardAvoidingView>
-      <VStack space="md">
-        <Center>
-          <Heading size={"2xl"}>What is your name?</Heading>
-        </Center>
-          <FormControl>
-            <Controller
-              control={control}
-              render={({ field: { value, onBlur, onChange } }) => (
-                <TextInput
-                  placeholder="First and last name"
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  style={style.textInput}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <PaddedView>
+          <VStack space="md">
+            <Center>
+              <Heading size={"2xl"}>What is your name?</Heading>
+            </Center>
+            <FormControl>
+              <Center>
+                <Controller
+                  control={control}
+                  render={({ field: { value, onBlur, onChange } }) => (
+                    <TextInput
+                      placeholder="First and last name"
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      style={style.textInput}
+                    />
+                  )}
+                  name="name"
                 />
-              )}
-              name="name"
-            />
-            {errors.name ? (
-              <Alert mt="$5" action="error" variant="solid">
-                <AlertIcon as={InfoIcon} mr="$3" />
-                <AlertText>{errors.name.message}</AlertText>
-              </Alert>
-            ) : null}
-            <View mt="$10">
-              <Button
-                size="xl"
-                variant="solid"
-                action="primary"
-                rounded="$full"
-                width="$full"
-                onPress={handleSubmit(onSave)}
-              >
-                <ButtonText>Next</ButtonText>
-              </Button>
-            </View>
-          </FormControl>
-      </VStack>
+              </Center>
+              {errors.name ? (
+                <Center>
+                  <Alert text={errors.name.message} />
+                </Center>
+              ) : null}
+              <Center mt="$10">
+                <Button
+                  size="xl"
+                  variant="solid"
+                  action="primary"
+                  bgColor={color.primary}
+                  rounded="$full"
+                  width="$full"
+                  maxWidth={500}
+                  onPress={handleSubmit(onSave)}
+                >
+                  <ButtonText>Next</ButtonText>
+                </Button>
+              </Center>
+            </FormControl>
+          </VStack>
+        </PaddedView>
+      </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 }

@@ -5,7 +5,9 @@ export const UserNameSchema = z.object({
 });
 
 export const UserGenderSchema = z.object({
-  gender: z.string().min(1, { message: "Please select a gender." }),
+  gender: z.enum(['male', 'female', 'other']).refine((value) => value !== undefined, {
+    message: 'Please select one of the option'
+  }),
 });
 
 export const UserChildrenSchema = z.object({
@@ -21,7 +23,7 @@ export const UserAccountCreateSchema = z.object({
     .min(8, { message: "Password must be at least 8 characters long" }),
   accepted: z
     .boolean()
-    .refine((val) => val === true, { message: "Terms and condition must be accepted" }),
+    .refine((val) => val !== true, { message: "Terms and condition must be accepted" }),
 });
 
 export type UserNameSchemaType = z.infer<typeof UserNameSchema>
