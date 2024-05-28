@@ -1,33 +1,37 @@
 import Alert from "@/components/Alert";
 import PaddedView from "@/components/PaddedView";
-import RadioButton from "@/components/RadioButton";
 import { useUserContext } from "@/context/UserContext";
 import { UserGenderSchema, UserGenderSchemaType } from "@/schema/userSchema";
 import {
   Button,
-  ButtonGroup,
   ButtonText,
   Center,
   Heading,
   VStack,
-  View,
-  Text,
+  RadioGroup,
+  HStack,
+  Radio,
+  RadioLabel,
 } from "@gluestack-ui/themed";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
-import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { color } from "@/style/color";
+
+const genderOptions = ["male", "female", "other"] as const;
 
 export default function Gender() {
-  const { setUser } = useUserContext();
+  const { user, setUser } = useUserContext();
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<UserGenderSchemaType>({
     resolver: zodResolver(UserGenderSchema),
+    defaultValues: {
+      gender: user.gender,
+    },
   });
-  const [selected, setSelected] = useState<string | null>(null);
 
   const onSave: SubmitHandler<UserGenderSchemaType> = (data) => {
     setUser((prev) => ({ ...prev, gender: data.gender }));
@@ -45,35 +49,27 @@ export default function Gender() {
             control={control}
             name="gender"
             render={({ field: { onChange, value } }) => (
-              <ButtonGroup space='md'>
-                <RadioButton
-                  label="Male"
-                  value="male"
-                  selectedValue={value}
-                  onSelect={(val) => {
-                    setSelected(val);
-                    onChange(val);
-                  }}
-                />
-                <RadioButton
-                  label="Female"
-                  value="female"
-                  selectedValue={value}
-                  onSelect={(val) => {
-                    setSelected(val);
-                    onChange(val);
-                  }}
-                />
-                <RadioButton
-                  label="Other"
-                  value="other"
-                  selectedValue={value}
-                  onSelect={(val) => {
-                    setSelected(val);
-                    onChange(val);
-                  }}
-                />
-              </ButtonGroup>
+              <RadioGroup value={value} onChange={onChange}>
+                <HStack space="md">
+                  {genderOptions.map((option) => {
+                    return (
+                      <Radio
+                        key={option}
+                        bgColor={value === option ? color.accent : color.gray}
+                        p="$4"
+                        borderRadius="$full"
+                        value={option}
+                      >
+                        <RadioLabel
+                          color={value === option ? color.white : color.black}
+                        >
+                          {option.toUpperCase()}
+                        </RadioLabel>
+                      </Radio>
+                    );
+                  })}
+                </HStack>
+              </RadioGroup>
             )}
           />
         </Center>

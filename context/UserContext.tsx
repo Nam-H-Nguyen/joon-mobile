@@ -9,7 +9,7 @@ import React, {
 // Define the user data type
 type User = {
   name: string;
-  gender: "male" | "female" | "other" | "";
+  gender: "male" | "female" | "other" | undefined;
   childrenNames: string[];
   email: string;
   password: string;
@@ -31,7 +31,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<User>({
     name: "",
-    gender: "",
+    gender: undefined,
     childrenNames: [],
     email: "",
     password: "",

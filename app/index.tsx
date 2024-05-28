@@ -24,13 +24,16 @@ import PaddedView from "@/components/PaddedView";
 import { color } from "@/style/color";
 
 export default function Index() {
-  const { setUser } = useUserContext();
+  const { user, setUser } = useUserContext();
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<UserNameSchemaType>({
     resolver: zodResolver(UserNameSchema),
+    defaultValues: {
+      name: user.name,
+    },
   });
 
   const onSave: SubmitHandler<UserNameSchemaType> = (data) => {
@@ -53,6 +56,7 @@ export default function Index() {
               <Center>
                 <Controller
                   control={control}
+                  name="name"
                   render={({ field: { value, onBlur, onChange } }) => (
                     <TextInput
                       placeholder="First and last name"
@@ -62,7 +66,6 @@ export default function Index() {
                       style={style.textInput}
                     />
                   )}
-                  name="name"
                 />
               </Center>
               {errors.name ? (
