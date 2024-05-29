@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import { Link, Stack } from "expo-router";
 import { StyleSheet } from "react-native";
 import {
   Button,
@@ -6,19 +6,24 @@ import {
   Heading,
   ArrowUpIcon,
   ButtonIcon,
+  Center,
 } from "@gluestack-ui/themed";
 
 export default function NotFoundScreen() {
   return (
     <>
       <Stack.Screen options={{ title: "Oops!" }} />
-      <Heading>This screen doesn't exist.</Heading>
-      <Button variant="link">
-        <ButtonText fontWeight="$md" fontSize="$sm">
-          Go back to home
-        </ButtonText>
-        <ButtonIcon as={ArrowUpIcon} h="$3" w="$3" ml="$1" />
-      </Button>
+      <Center p="$5">
+        <Heading>This screen doesn't exist.</Heading>
+        <Link href='/'>
+          <Button variant="link">
+            <ButtonText fontWeight="$md" fontSize="$sm">
+              Go back to home
+            </ButtonText>
+            <ButtonIcon as={ArrowUpIcon} h="$3" w="$3" ml="$1" />
+          </Button>
+        </Link>
+      </Center>
     </>
   );
 }

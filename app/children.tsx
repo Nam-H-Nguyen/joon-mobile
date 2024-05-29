@@ -47,6 +47,8 @@ export default function Children() {
     defaultValues: { children: user.children },
   });
 
+  const watched = watch("children");
+
   const { fields, append, remove } = useFieldArray({
     name: "children",
     control,
@@ -54,7 +56,7 @@ export default function Children() {
 
   const onSave: SubmitHandler<UserChildrenSchemaType> = (data) => {
     setUser((prev) => ({ ...prev, children: data.children }));
-    router.push("/account");
+    router.replace("/account");
   };
 
   return (
@@ -66,6 +68,7 @@ export default function Children() {
         <PaddedView>
           <Center mb="$5">
             <Heading size={"2xl"}>Add your children</Heading>
+            <Text>{JSON.stringify(watched)}</Text>
           </Center>
           <FormControl>
             <VStack space="md">

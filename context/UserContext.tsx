@@ -36,7 +36,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
   const [user, setUser] = useState<User>({
     name: "",
     gender: undefined,
-    children: [{ name: "Nam" }],
+    children: [{ name: "" }],
     email: "",
     password: "",
     accepted: false,

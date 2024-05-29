@@ -5,14 +5,16 @@ import {
   Heading,
   Input,
   InputField,
-  InputIcon,
   InputSlot,
   Text,
   VStack,
-  EyeIcon,
-  EyeOffIcon,
   FormControlLabel,
   FormControlLabelText,
+  Checkbox,
+  CheckboxLabel,
+  CheckboxIndicator,
+  CheckboxIcon,
+  CheckIcon,
 } from "@gluestack-ui/themed";
 import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -22,10 +24,10 @@ import {
   UserAccountCreateSchemaType,
 } from "@/schema/userSchema";
 import { useUserContext } from "@/context/UserContext";
-import { router } from "expo-router";
 import Alert from "@/components/Alert";
-import Feather from '@expo/vector-icons/Feather';
+import Feather from "@expo/vector-icons/Feather";
 import { color } from "@/style/color";
+import { router } from "expo-router";
 
 export default function Account() {
   const [showPassword, setShowPassword] = useState(false);
@@ -37,14 +39,14 @@ export default function Account() {
     formState: { errors },
   } = useForm<UserAccountCreateSchemaType>({
     resolver: zodResolver(UserAccountCreateSchema),
-    defaultValues: {
-      email: user.email,
-      password: user.password,
-      accepted: user.accepted,
-    },
+    // defaultValues: {
+    //   email: user.email,
+    //   password: user.password,
+    //   accepted: user.accepted,
+    // },
   });
 
-  const watched = watch(["email", "password", "accepted"]);
+  // const watched = watch(["email", "password", "accepted"]);
   const onSave: SubmitHandler<UserAccountCreateSchemaType> = (data) => {
     console.log("data:", JSON.stringify(data));
     setUser((prev) => ({
@@ -53,7 +55,7 @@ export default function Account() {
       password: data.password,
       accepted: data.accepted,
     }));
-    // router.push("/gender");
+    router.push("/dashboard");
   };
 
   return (
@@ -67,9 +69,6 @@ export default function Account() {
       $dark-borderColor="$borderDark800"
     >
       <VStack space="xl">
-        <Text color="$text900" lineHeight="$md">
-          {watched}
-        </Text>
         <Heading color="$text900" lineHeight="$md">
           Login
         </Heading>
@@ -93,9 +92,7 @@ export default function Account() {
               </Input>
             )}
           />
-          {errors.email ? (
-              <Alert text={errors.email.message} />
-          ) : null}
+          {errors.email ? <Alert text={errors.email.message} /> : null}
         </VStack>
         <VStack space="xs">
           <FormControlLabel mb="$2">
@@ -118,31 +115,35 @@ export default function Account() {
                   pr="$3"
                   onPress={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? <Feather name="eye" size={16} color={color.accent} /> : <Feather name="eye-off" size={16} color={color.accent} />}
+                  {showPassword ? (
+                    <Feather name="eye" size={16} color={color.accent} />
+                  ) : (
+                    <Feather name="eye-off" size={16} color={color.accent} />
+                  )}
                 </InputSlot>
               </Input>
             )}
           />
-          {errors.password ? (
-              <Alert text={errors.password.message} />
-          ) : null}
+          {errors.password ? <Alert text={errors.password.message} /> : null}
         </VStack>
         <Controller
           control={control}
           name="accepted"
           render={({ field: { value, onChange } }) => (
-            <label style={{ display: "flex", alignItems: "center" }}>
-              <input type="checkbox" value={value === true ? "yes" : "no"} onChange={(e) => {
-                onChange(e.target.checked);
-
-              }} />
-              <Text>Accept Terms & Conditions</Text>
-            </label>
+            <Checkbox
+              value={value === true ? "yes" : "no"}
+              size="md"
+              onChange={onChange}
+              aria-label="checkbox"
+            >
+              <CheckboxIndicator mr="$2">
+                {value ? <Feather name="check" size={16} color={color.white} /> : null}
+              </CheckboxIndicator>
+              <CheckboxLabel>Accept Terms & Conditions</CheckboxLabel>
+            </Checkbox>
           )}
         />
-        {errors.accepted ? (
-            <Alert text={errors.accepted.message} />
-        ) : null}
+        {errors.accepted ? <Alert text={errors.accepted.message} /> : null}
         <Button ml="auto" onPress={handleSubmit(onSave)}>
           <ButtonText color="$white">Save</ButtonText>
         </Button>

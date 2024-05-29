@@ -7,6 +7,7 @@ import { config } from "@gluestack-ui/config";
 import { GluestackUIProvider, View } from "@gluestack-ui/themed";
 import { UserProvider } from "@/context/UserContext";
 import DashboardStackScreens from "@/routes/DashboardStackScreens";
+import PaddedView from "@/components/PaddedView";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -14,7 +15,9 @@ SplashScreen.preventAutoHideAsync();
 export default function DashboardLayout() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <DashboardStackScreens />
+      <PaddedView>
+        <DashboardStackScreens />
+      </PaddedView>
     </SafeAreaView>
   );
 }
