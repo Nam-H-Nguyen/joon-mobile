@@ -35,20 +35,17 @@ export default function Account() {
   const {
     control,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<UserAccountCreateSchemaType>({
     resolver: zodResolver(UserAccountCreateSchema),
-    // defaultValues: {
-    //   email: user.email,
-    //   password: user.password,
-    //   accepted: user.accepted,
-    // },
+    defaultValues: {
+      email: user.email,
+      password: user.password,
+      accepted: user.accepted,
+    },
   });
 
-  // const watched = watch(["email", "password", "accepted"]);
   const onSave: SubmitHandler<UserAccountCreateSchemaType> = (data) => {
-    console.log("data:", JSON.stringify(data));
     setUser((prev) => ({
       ...prev,
       email: data.email,

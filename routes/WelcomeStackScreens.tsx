@@ -2,7 +2,14 @@ import { Stack } from "expo-router";
 
 export default function WelcomeStackScreens() {
   return (
-    <Stack screenOptions={{ contentStyle: { backgroundColor: "white" } }}>
+    <Stack
+      screenOptions={{
+        contentStyle: { backgroundColor: "white" },
+        headerBackTitleVisible: false,
+        headerTitle: "",
+        headerShadowVisible: false,
+      }}
+    >
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="gender" />
       <Stack.Screen name="children" />

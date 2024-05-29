@@ -40,14 +40,11 @@ export default function Children() {
   const {
     control,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<UserChildrenSchemaType>({
     resolver: zodResolver(UserChildrenSchema),
     defaultValues: { children: user.children },
   });
-
-  const watched = watch("children");
 
   const { fields, append, remove } = useFieldArray({
     name: "children",
@@ -68,7 +65,6 @@ export default function Children() {
         <PaddedView>
           <Center mb="$5">
             <Heading size={"2xl"}>Add your children</Heading>
-            <Text>{JSON.stringify(watched)}</Text>
           </Center>
           <FormControl>
             <VStack space="md">
