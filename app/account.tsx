@@ -11,28 +11,50 @@ import {
   VStack,
   EyeIcon,
   EyeOffIcon,
+  FormControlLabel,
+  FormControlLabelText,
 } from "@gluestack-ui/themed";
 import { useState } from "react";
-import {
-  Controller,
-  FieldValues,
-  SubmitHandler,
-  useForm,
-} from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UserAccountCreateSchema } from "@/schema/userSchema";
+import {
+  UserAccountCreateSchema,
+  UserAccountCreateSchemaType,
+} from "@/schema/userSchema";
+import { useUserContext } from "@/context/UserContext";
+import { router } from "expo-router";
+import Alert from "@/components/Alert";
+import Feather from '@expo/vector-icons/Feather';
+import { color } from "@/style/color";
 
 export default function Account() {
   const [showPassword, setShowPassword] = useState(false);
+  const { user, setUser } = useUserContext();
   const {
     control,
-    register,
     handleSubmit,
-    setValue,
+    watch,
     formState: { errors },
-  } = useForm({
+  } = useForm<UserAccountCreateSchemaType>({
     resolver: zodResolver(UserAccountCreateSchema),
+    defaultValues: {
+      email: user.email,
+      password: user.password,
+      accepted: user.accepted,
+    },
   });
+
+  const watched = watch(["email", "password", "accepted"]);
+  const onSave: SubmitHandler<UserAccountCreateSchemaType> = (data) => {
+    console.log("data:", JSON.stringify(data));
+    setUser((prev) => ({
+      ...prev,
+      email: data.email,
+      password: data.password,
+      accepted: data.accepted,
+    }));
+    // router.push("/gender");
+  };
 
   return (
     <FormControl
@@ -45,37 +67,83 @@ export default function Account() {
       $dark-borderColor="$borderDark800"
     >
       <VStack space="xl">
+        <Text color="$text900" lineHeight="$md">
+          {watched}
+        </Text>
         <Heading color="$text900" lineHeight="$md">
           Login
         </Heading>
         <VStack space="xs">
-          <Text color="$text500" lineHeight="$xs">
-            Email
-          </Text>
-          <Input>
-            <InputField type="text" />
-          </Input>
+          <FormControlLabel mb="$2">
+            <FormControlLabelText color="$text500" lineHeight="$xs">
+              Email
+            </FormControlLabelText>
+          </FormControlLabel>
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { value, onBlur, onChange } }) => (
+              <Input>
+                <InputField
+                  type="text"
+                  value={value}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                />
+              </Input>
+            )}
+          />
+          {errors.email ? (
+              <Alert text={errors.email.message} />
+          ) : null}
         </VStack>
         <VStack space="xs">
-          <Text color="$text500" lineHeight="$xs">
-            Password
-          </Text>
-          <Input alignContent="center">
-            <InputField type={showPassword ? "text" : "password"} />
-            <InputSlot pr="$3" onPress={() => setShowPassword(!showPassword)}>
-              <InputIcon
-                as={showPassword ? EyeIcon : EyeOffIcon}
-                color="$darkBlue500"
-              />
-            </InputSlot>
-          </Input>
+          <FormControlLabel mb="$2">
+            <FormControlLabelText color="$text500" lineHeight="$xs">
+              Password
+            </FormControlLabelText>
+          </FormControlLabel>
+          <Controller
+            control={control}
+            name="password"
+            render={({ field: { value, onBlur, onChange } }) => (
+              <Input alignContent="center">
+                <InputField
+                  type={showPassword ? "text" : "password"}
+                  value={value}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                />
+                <InputSlot
+                  pr="$3"
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <Feather name="eye" size={16} color={color.accent} /> : <Feather name="eye-off" size={16} color={color.accent} />}
+                </InputSlot>
+              </Input>
+            )}
+          />
+          {errors.password ? (
+              <Alert text={errors.password.message} />
+          ) : null}
         </VStack>
-        <Button
-          ml="auto"
-          onPress={() => {
-            () => console.log("hi");
-          }}
-        >
+        <Controller
+          control={control}
+          name="accepted"
+          render={({ field: { value, onChange } }) => (
+            <label style={{ display: "flex", alignItems: "center" }}>
+              <input type="checkbox" value={value === true ? "yes" : "no"} onChange={(e) => {
+                onChange(e.target.checked);
+
+              }} />
+              <Text>Accept Terms & Conditions</Text>
+            </label>
+          )}
+        />
+        {errors.accepted ? (
+            <Alert text={errors.accepted.message} />
+        ) : null}
+        <Button ml="auto" onPress={handleSubmit(onSave)}>
           <ButtonText color="$white">Save</ButtonText>
         </Button>
       </VStack>

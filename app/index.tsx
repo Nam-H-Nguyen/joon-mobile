@@ -62,7 +62,7 @@ export default function Index() {
                       placeholder="First and last name"
                       onBlur={onBlur}
                       onChangeText={onChange}
-                      value={value}
+                      value={value || user.name}
                       style={style.textInput}
                     />
                   )}

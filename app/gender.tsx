@@ -12,6 +12,7 @@ import {
   HStack,
   Radio,
   RadioLabel,
+  FormControl,
 } from "@gluestack-ui/themed";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
@@ -44,49 +45,51 @@ export default function Gender() {
         <Center>
           <Heading size={"2xl"}>What is your gender?</Heading>
         </Center>
-        <Center>
-          <Controller
-            control={control}
-            name="gender"
-            render={({ field: { onChange, value } }) => (
-              <RadioGroup value={value} onChange={onChange}>
-                <HStack space="md">
-                  {genderOptions.map((option) => {
-                    return (
-                      <Radio
-                        key={option}
-                        bgColor={value === option ? color.accent : color.gray}
-                        p="$4"
-                        borderRadius="$full"
-                        value={option}
-                      >
-                        <RadioLabel
-                          color={value === option ? color.white : color.black}
+        <FormControl>
+          <Center>
+            <Controller
+              control={control}
+              name="gender"
+              render={({ field: { onChange, value } }) => (
+                <RadioGroup value={value || user.name} onChange={onChange}>
+                  <HStack space="md">
+                    {genderOptions.map((option) => {
+                      return (
+                        <Radio
+                          key={option}
+                          bgColor={value === option ? color.accent : color.gray}
+                          p="$4"
+                          borderRadius="$full"
+                          value={option}
                         >
-                          {option.toUpperCase()}
-                        </RadioLabel>
-                      </Radio>
-                    );
-                  })}
-                </HStack>
-              </RadioGroup>
-            )}
-          />
-        </Center>
-        {errors.gender ? <Alert text={errors.gender.message} /> : null}
-        <Center mt="$10">
-          <Button
-            size="xl"
-            variant="solid"
-            action="primary"
-            rounded="$full"
-            width="$full"
-            maxWidth={500}
-            onPress={handleSubmit(onSave)}
-          >
-            <ButtonText>Next</ButtonText>
-          </Button>
-        </Center>
+                          <RadioLabel
+                            color={value === option ? color.white : color.black}
+                          >
+                            {option.toUpperCase()}
+                          </RadioLabel>
+                        </Radio>
+                      );
+                    })}
+                  </HStack>
+                </RadioGroup>
+              )}
+            />
+          </Center>
+          {errors.gender ? <Alert text={errors.gender.message} /> : null}
+          <Center mt="$10">
+            <Button
+              size="xl"
+              variant="solid"
+              action="primary"
+              rounded="$full"
+              width="$full"
+              maxWidth={500}
+              onPress={handleSubmit(onSave)}
+            >
+              <ButtonText>Next</ButtonText>
+            </Button>
+          </Center>
+        </FormControl>
       </VStack>
     </PaddedView>
   );
